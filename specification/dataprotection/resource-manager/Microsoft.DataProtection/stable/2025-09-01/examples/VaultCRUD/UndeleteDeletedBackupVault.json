@@ -1,0 +1,36 @@
+{
+  "parameters": {
+    "subscriptionId": "0b352192-dcac-4cc7-992e-a96190ccc68c",
+    "location": "westus",
+    "deletedBackupVaultName": "swaggerExample",
+    "api-version": "2025-09-01",
+    "undeleteInput": {
+      "properties": {
+        "recoveryResourceGroupId": "/subscriptions/0b352192-dcac-4cc7-992e-a96190ccc68c/resourceGroups/SampleResourceGroup"
+      }
+    }
+  },
+  "responses": {
+    "200": {
+      "body": {
+        "id": "/subscriptions/0b352192-dcac-4cc7-992e-a96190ccc68c/providers/Microsoft.DataProtection/locations/westus/deletedBackupVaults/swaggerExample",
+        "name": "swaggerExample",
+        "type": "Microsoft.DataProtection/locations/deletedBackupVaults",
+        "properties": {
+          "vaultId": "/subscriptions/0b352192-dcac-4cc7-992e-a96190ccc68c/resourceGroups/SampleResourceGroup/providers/Microsoft.DataProtection/backupVaults/swaggerExample",
+          "vaultDeletionTime": "2025-08-20T09:49:46Z",
+          "purgeAt": "2025-09-20T09:49:46Z"
+        }
+      },
+      "headers": {
+        "Azure-AsyncOperation": "https://management.azure.com/subscriptions/0b352192-dcac-4cc7-992e-a96190ccc68c/providers/Microsoft.DataProtection/locations/westus/deletedBackupVaults/swaggerExample/operations/a93f3cd5-9035-4b1e-a2c9-b16df6d5d34b?api-version=2025-09-01"
+      }
+    },
+    "202": {
+      "headers": {
+        "Azure-AsyncOperation": "https://management.azure.com/subscriptions/0b352192-dcac-4cc7-992e-a96190ccc68c/providers/Microsoft.DataProtection/locations/westus/deletedBackupVaults/swaggerExample/operations/a93f3cd5-9035-4b1e-a2c9-b16df6d5d34b?api-version=2025-09-01",
+        "Retry-After": 30
+      }
+    }
+  }
+}

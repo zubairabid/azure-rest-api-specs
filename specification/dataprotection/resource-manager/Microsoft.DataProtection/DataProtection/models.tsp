@@ -1,11 +1,13 @@
 import "@typespec/rest";
 import "@typespec/http";
+import "@typespec/versioning";
 import "@azure-tools/typespec-azure-core";
 import "@azure-tools/typespec-azure-resource-manager";
 import "@azure-tools/typespec-client-generator-core";
 
 using TypeSpec.Rest;
 using TypeSpec.Http;
+using TypeSpec.Versioning;
 using Azure.Core;
 using Azure.ResourceManager;
 using Azure.ResourceManager.Foundations;
@@ -84,6 +86,29 @@ union SoftDeleteState {
 
   /**
    * Soft Delete is permanently enabled for the BackupVault and the setting cannot be changed
+   */
+  AlwaysOn: "AlwaysOn",
+}
+
+/**
+ * Enhanced security state
+ */
+@added(Versions.v2025_09_01)
+union EnhancedSecurityState {
+  string,
+
+  /**
+   * Enhanced security is turned off for the BackupVault
+   */
+  Disabled: "Disabled",
+
+  /**
+   * Enhanced security is enabled for the BackupVault but can be turned off
+   */
+  Enabled: "Enabled",
+
+  /**
+   * Enhanced security is permanently enabled for the BackupVault and the setting cannot be changed
    */
   AlwaysOn: "AlwaysOn",
 }
@@ -728,6 +753,12 @@ model SoftDeleteSettings {
    * Soft delete retention duration
    */
   retentionDurationInDays?: float64;
+
+  /**
+   * Enhanced security state
+   */
+  @added(Versions.v2025_09_01)
+  enhancedSecurityState?: EnhancedSecurityState;
 }
 
 /**

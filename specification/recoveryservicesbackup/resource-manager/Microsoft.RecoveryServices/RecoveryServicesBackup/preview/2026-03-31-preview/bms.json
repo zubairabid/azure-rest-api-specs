@@ -160,9 +160,6 @@
       "name": "RestoresFromCrossTenantVault"
     },
     {
-      "name": "ProtectedItemOperationResultsFromCrossTenantVault"
-    },
-    {
       "name": "ProtectedItemOperationStatusesFromCrossTenantVault"
     },
     {
@@ -178,16 +175,10 @@
       "name": "ValidateOperationFromCrossTenantVault"
     },
     {
-      "name": "ValidateOperationResultFromCrossTenantVault"
-    },
-    {
       "name": "ValidateOperationStatusFromCrossTenantVault"
     },
     {
       "name": "CrossTenantVaultCredential"
-    },
-    {
-      "name": "CrossTenantVaultCredentialOperationResults"
     },
     {
       "name": "CrossTenantVaultCredentialOperationStatuses"
@@ -752,7 +743,6 @@
       "get": {
         "operationId": "ProtectedItemOperationResultsFromCrossTenantVault_Get",
         "tags": [
-          "ProtectedItemOperationResultsFromCrossTenantVault",
           "CrossTenant"
         ],
         "description": "Fetches the result of any cross-tenant operation on the backup item.\nWhile the operation is in progress this returns 202 Accepted with Location/Retry-After\nheaders pointing back at this same poll URL. When the operation completes it returns\neither 200 OK with the final ProtectedItemResource body, or 204 No Content if there\nis no body to return.",
@@ -1566,7 +1556,6 @@
       "get": {
         "operationId": "ValidateOperationResultFromCrossTenantVault_Get",
         "tags": [
-          "ValidateOperationResultFromCrossTenantVault",
           "CrossTenant"
         ],
         "description": "Gets the result of a specific validate operation for cross-tenant restore scenarios.\nWhile the operation is in progress this returns 202 Accepted with Location/Retry-After\nheaders pointing back at this same poll URL. When the operation completes it returns\neither 200 OK with the final ValidateOperationsResponse body, or 204 No Content if\nthere is no body to return.",
@@ -1868,7 +1857,6 @@
       "get": {
         "operationId": "CrossTenantVaultCredentialOperationResults_Get",
         "tags": [
-          "CrossTenantVaultCredentialOperationResults",
           "CrossTenant"
         ],
         "description": "Gets the result of an async vault credential generation operation.\nWhile the TEE job is in progress this returns 202 Accepted with Location/Retry-After\nheaders pointing back at this same poll URL. When the job completes it returns either\n200 OK with the generated VaultCredentialCertificateResponse body, or 204 No Content\nif there is no body to return.",

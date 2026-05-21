@@ -315,25 +315,8 @@ interface RestoresFromCrossTenantVault {
   >;
 }
 
-// LegacyOperations alias for routes parented at the protected-item resource
-// (5 levels deep, child = operationResults/{operationId}).
-alias ProtectedItemOperationResultsFromCrossTenantVaultOps = Azure.ResourceManager.Legacy.LegacyOperations<
-  {
-    ...StandardResourceGroupParams;
-    ...CrossTenantProtectedItemParentParameters;
-  },
-  {
-    @doc("OperationID which represents the operation whose result needs to be fetched.")
-    @path
-    @segment("operationResults")
-    @key
-    operationId: string;
-  },
-  ResourceName = "ProtectedItemOperationResultsFromCrossTenantVault"
->;
-
+#suppress "@azure-tools/typespec-azure-resource-manager/arm-resource-interface-requires-decorator" "Polling endpoint: not an ARM resource lifecycle operation. Modeled as a bare route (matching routes.tsp ProtectionContainerRefreshOperationResults precedent in this same RP) so the standard ARM-resource GET constraints do not apply. The wire follows the Location-header LRO pattern (Azure/azure-resource-manager-rpc async-api-reference.md): 202 while running with Location/Retry-After, 200 with the terminal ProtectedItemResource body when complete (or 204 if no body)."
 @added(Versions.v2026_03_31_preview)
-@armResourceOperations
 interface ProtectedItemOperationResultsFromCrossTenantVault {
   /**
    * Fetches the result of any cross-tenant operation on the backup item.
@@ -342,16 +325,45 @@ interface ProtectedItemOperationResultsFromCrossTenantVault {
    * either 200 OK with the final ProtectedItemResource body, or 204 No Content if there
    * is no body to return.
    */
+  @route("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RecoveryServices/vaults/{vaultName}/backupCrossTenantVaultMappings/{crossTenantVaultMappingName}/backupFabrics/{fabricName}/protectionContainers/{containerName}/protectedItems/{protectedItemName}/operationResults/{operationId}")
+  @get
   @tag("CrossTenant")
-  get is ProtectedItemOperationResultsFromCrossTenantVaultOps.Read<
-    ProtectedItemResource,
-    Response =
-      | ArmResponse<ProtectedItemResource>
-      | ArmAcceptedResponse<
-          "Accepted",
-          ArmLroLocationHeader & Azure.Core.Foundations.RetryAfterHeader
-        >
-  >;
+  get(
+    ...ApiVersionParameter,
+    ...SubscriptionIdParameter,
+    ...ResourceGroupParameter,
+
+    @doc("The name of the recovery services vault.")
+    @path
+    vaultName: string,
+
+    @doc("Cross-tenant vault mapping name.")
+    @path
+    @pattern("^[A-Za-z][A-Za-z0-9]{1,99}$")
+    crossTenantVaultMappingName: string,
+
+    @doc("Fabric name associated with the backed up items.")
+    @path
+    fabricName: string,
+
+    @doc("Container name associated with the backed up items.")
+    @path
+    containerName: string,
+
+    @doc("Backed up item name.")
+    @path
+    protectedItemName: string,
+
+    @doc("OperationID which represents the operation whose result needs to be fetched.")
+    @path
+    operationId: string,
+  ):
+    | ArmResponse<ProtectedItemResource>
+    | ArmAcceptedResponse<
+        "Accepted",
+        ArmLroLocationHeader & Azure.Core.Foundations.RetryAfterHeader
+      >
+    | ErrorResponse;
 }
 
 // LegacyOperations alias for routes parented at the protected-item resource
@@ -459,25 +471,8 @@ interface ValidateOperationFromCrossTenantVault {
   >;
 }
 
-// LegacyOperations alias for routes parented at the mapping resource,
-// child = backupValidateOperationResults/{operationId}.
-alias ValidateOperationResultFromCrossTenantVaultOps = Azure.ResourceManager.Legacy.LegacyOperations<
-  {
-    ...StandardResourceGroupParams;
-    ...CrossTenantVaultMappingParentParameters;
-  },
-  {
-    @doc("OperationID which represents the operation whose result needs to be fetched.")
-    @path
-    @segment("backupValidateOperationResults")
-    @key
-    operationId: string;
-  },
-  ResourceName = "ValidateOperationResultFromCrossTenantVault"
->;
-
+#suppress "@azure-tools/typespec-azure-resource-manager/arm-resource-interface-requires-decorator" "Polling endpoint: not an ARM resource lifecycle operation. Modeled as a bare route (matching routes.tsp ProtectionContainerRefreshOperationResults precedent in this same RP) so the standard ARM-resource GET constraints do not apply. The wire follows the Location-header LRO pattern (Azure/azure-resource-manager-rpc async-api-reference.md): 202 while running with Location/Retry-After, 200 with the terminal ValidateOperationsResponse body when complete (or 204 if no body)."
 @added(Versions.v2026_03_31_preview)
-@armResourceOperations
 interface ValidateOperationResultFromCrossTenantVault {
   /**
    * Gets the result of a specific validate operation for cross-tenant restore scenarios.
@@ -486,16 +481,33 @@ interface ValidateOperationResultFromCrossTenantVault {
    * either 200 OK with the final ValidateOperationsResponse body, or 204 No Content if
    * there is no body to return.
    */
+  @route("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RecoveryServices/vaults/{vaultName}/backupCrossTenantVaultMappings/{crossTenantVaultMappingName}/backupValidateOperationResults/{operationId}")
+  @get
   @tag("CrossTenant")
-  get is ValidateOperationResultFromCrossTenantVaultOps.Read<
-    CrossTenantVaultMapping,
-    Response =
-      | ArmResponse<ValidateOperationsResponse>
-      | ArmAcceptedResponse<
-          "Accepted",
-          ArmLroLocationHeader & Azure.Core.Foundations.RetryAfterHeader
-        >
-  >;
+  get(
+    ...ApiVersionParameter,
+    ...SubscriptionIdParameter,
+    ...ResourceGroupParameter,
+
+    @doc("The name of the recovery services vault.")
+    @path
+    vaultName: string,
+
+    @doc("Cross-tenant vault mapping name.")
+    @path
+    @pattern("^[A-Za-z][A-Za-z0-9]{1,99}$")
+    crossTenantVaultMappingName: string,
+
+    @doc("OperationID which represents the operation whose result needs to be fetched.")
+    @path
+    operationId: string,
+  ):
+    | ArmResponse<ValidateOperationsResponse>
+    | ArmAcceptedResponse<
+        "Accepted",
+        ArmLroLocationHeader & Azure.Core.Foundations.RetryAfterHeader
+      >
+    | ErrorResponse;
 }
 
 // LegacyOperations alias for routes parented at the mapping resource,
@@ -637,25 +649,8 @@ interface CrossTenantVaultCredential {
   >;
 }
 
-// LegacyOperations alias for routes parented at the certificate resource,
-// child = operationResults/{operationId}.
-alias CrossTenantVaultCredentialOperationResultsOps = Azure.ResourceManager.Legacy.LegacyOperations<
-  {
-    ...StandardResourceGroupParams;
-    ...CrossTenantVaultCredentialParentParameters;
-  },
-  {
-    @doc("Operation ID returned in the Location header of the generate call.")
-    @path
-    @segment("operationResults")
-    @key
-    operationId: string;
-  },
-  ResourceName = "CrossTenantVaultCredentialOperationResults"
->;
-
+#suppress "@azure-tools/typespec-azure-resource-manager/arm-resource-interface-requires-decorator" "Polling endpoint: not an ARM resource lifecycle operation. Modeled as a bare route (matching routes.tsp ProtectionContainerRefreshOperationResults precedent in this same RP) so the standard ARM-resource GET constraints do not apply. The wire follows the Location-header LRO pattern (Azure/azure-resource-manager-rpc async-api-reference.md): 202 while running with Location/Retry-After, 200 with the terminal VaultCredentialCertificateResponse body when complete (or 204 if no body)."
 @added(Versions.v2026_03_31_preview)
-@armResourceOperations
 interface CrossTenantVaultCredentialOperationResults {
   /**
    * Gets the result of an async vault credential generation operation.
@@ -664,17 +659,37 @@ interface CrossTenantVaultCredentialOperationResults {
    * 200 OK with the generated VaultCredentialCertificateResponse body, or 204 No Content
    * if there is no body to return.
    */
-  #suppress "@azure-tools/typespec-azure-resource-manager/arm-resource-operation-response" "Phase 9 (PR #41694 issuecomment-4449163933): operation-result Read is templated against the parent CrossTenantVaultMapping resource (per live1206's suggested fix) so the .NET mgmt emitter resolves the resource type for Exists-pipeline generation; the 200 returns VaultCredentialCertificateResponse, which is the actual operation-result payload. RPC 008 (same schema across PUT/GET/PATCH/LIST) does not apply: this route is a polling GET, not a resource lifecycle operation."
+  @route("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RecoveryServices/vaults/{vaultName}/backupCrossTenantVaultMappings/{crossTenantVaultMappingName}/vaultCredentials/{certificateName}/operationResults/{operationId}")
+  @get
   @tag("CrossTenant")
-  get is CrossTenantVaultCredentialOperationResultsOps.Read<
-    CrossTenantVaultMapping,
-    Response =
-      | ArmResponse<VaultCredentialCertificateResponse>
-      | ArmAcceptedResponse<
-          "Accepted",
-          ArmLroLocationHeader & Azure.Core.Foundations.RetryAfterHeader
-        >
-  >;
+  get(
+    ...ApiVersionParameter,
+    ...SubscriptionIdParameter,
+    ...ResourceGroupParameter,
+
+    @doc("The name of the recovery services vault.")
+    @path
+    vaultName: string,
+
+    @doc("Cross-tenant vault mapping name.")
+    @path
+    @pattern("^[A-Za-z][A-Za-z0-9]{1,99}$")
+    crossTenantVaultMappingName: string,
+
+    @doc("Name identifier for the certificate.")
+    @path
+    certificateName: string,
+
+    @doc("Operation ID returned in the Location header of the generate call.")
+    @path
+    operationId: string,
+  ):
+    | ArmResponse<VaultCredentialCertificateResponse>
+    | ArmAcceptedResponse<
+        "Accepted",
+        ArmLroLocationHeader & Azure.Core.Foundations.RetryAfterHeader
+      >
+    | ErrorResponse;
 }
 
 // LegacyOperations alias for routes parented at the certificate resource,

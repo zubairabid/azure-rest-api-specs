@@ -160,9 +160,6 @@
       "name": "RestoresFromCrossTenantVault"
     },
     {
-      "name": "ProtectedItemOperationResultsFromCrossTenantVault"
-    },
-    {
       "name": "ProtectedItemOperationStatusesFromCrossTenantVault"
     },
     {
@@ -178,16 +175,10 @@
       "name": "ValidateOperationFromCrossTenantVault"
     },
     {
-      "name": "ValidateOperationResultFromCrossTenantVault"
-    },
-    {
       "name": "ValidateOperationStatusFromCrossTenantVault"
     },
     {
       "name": "CrossTenantVaultCredential"
-    },
-    {
-      "name": "CrossTenantVaultCredentialOperationResults"
     },
     {
       "name": "CrossTenantVaultCredentialOperationStatuses"
@@ -752,10 +743,9 @@
       "get": {
         "operationId": "ProtectedItemOperationResultsFromCrossTenantVault_Get",
         "tags": [
-          "ProtectedItemOperationResultsFromCrossTenantVault",
           "CrossTenant"
         ],
-        "description": "Fetches the result of any cross-tenant operation on the backup item.",
+        "description": "Fetches the result of any cross-tenant operation on the backup item.\nReturns 202 while the operation is in progress and 204 when it has completed.",
         "parameters": [
           {
             "$ref": "../../../../../../common-types/resource-management/v3/types.json#/parameters/ApiVersionParameter"
@@ -811,26 +801,11 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "Azure operation completed successfully.",
-            "schema": {
-              "$ref": "#/definitions/ProtectedItemResource"
-            }
-          },
           "202": {
-            "description": "The request has been accepted for processing, but processing has not yet completed.",
-            "schema": {
-              "$ref": "#/definitions/ProtectedItemResource"
-            },
-            "headers": {
-              "Location": {
-                "type": "string"
-              },
-              "Retry-After": {
-                "type": "integer",
-                "format": "int32"
-              }
-            }
+            "description": "Resource operation accepted."
+          },
+          "204": {
+            "description": "Operation completed successfully."
           },
           "default": {
             "description": "An unexpected error response.",
@@ -1567,10 +1542,9 @@
       "get": {
         "operationId": "ValidateOperationResultFromCrossTenantVault_Get",
         "tags": [
-          "ValidateOperationResultFromCrossTenantVault",
           "CrossTenant"
         ],
-        "description": "Gets the result of a specific validate operation for cross-tenant restore scenarios.",
+        "description": "Gets the result of a specific validate operation for cross-tenant restore scenarios.\nReturns 202 while the operation is in progress and 204 when it has completed.",
         "parameters": [
           {
             "$ref": "../../../../../../common-types/resource-management/v3/types.json#/parameters/ApiVersionParameter"
@@ -1605,26 +1579,11 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "Azure operation completed successfully.",
-            "schema": {
-              "$ref": "#/definitions/ValidateOperationsResponse"
-            }
-          },
           "202": {
-            "description": "The request has been accepted for processing, but processing has not yet completed.",
-            "schema": {
-              "$ref": "#/definitions/ValidateOperationsResponse"
-            },
-            "headers": {
-              "Location": {
-                "type": "string"
-              },
-              "Retry-After": {
-                "type": "integer",
-                "format": "int32"
-              }
-            }
+            "description": "Resource operation accepted."
+          },
+          "204": {
+            "description": "Operation completed successfully."
           },
           "default": {
             "description": "An unexpected error response.",
@@ -1870,10 +1829,9 @@
       "get": {
         "operationId": "CrossTenantVaultCredentialOperationResults_Get",
         "tags": [
-          "CrossTenantVaultCredentialOperationResults",
           "CrossTenant"
         ],
-        "description": "Gets the result of an async vault credential generation operation.\nReturns 202 Accepted while the TEE job is still in progress.\nReturns 200 OK with VaultCredentialCertificateResponse when the job completes.",
+        "description": "Gets the result of an async vault credential generation operation.\nReturns 202 Accepted while the TEE job is in progress and 204 No Content when it has completed.",
         "parameters": [
           {
             "$ref": "../../../../../../common-types/resource-management/v3/types.json#/parameters/ApiVersionParameter"
@@ -1915,26 +1873,11 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "Azure operation completed successfully.",
-            "schema": {
-              "$ref": "#/definitions/VaultCredentialCertificateResponse"
-            }
-          },
           "202": {
-            "description": "The request has been accepted for processing, but processing has not yet completed.",
-            "schema": {
-              "$ref": "#/definitions/VaultCredentialCertificateResponse"
-            },
-            "headers": {
-              "Location": {
-                "type": "string"
-              },
-              "Retry-After": {
-                "type": "integer",
-                "format": "int32"
-              }
-            }
+            "description": "Resource operation accepted."
+          },
+          "204": {
+            "description": "Operation completed successfully."
           },
           "default": {
             "description": "An unexpected error response.",

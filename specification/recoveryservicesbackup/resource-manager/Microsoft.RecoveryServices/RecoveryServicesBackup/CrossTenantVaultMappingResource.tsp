@@ -315,8 +315,8 @@ interface RestoresFromCrossTenantVault {
   >;
 }
 
-@added(Versions.v2026_03_31_preview)
 #suppress "@azure-tools/typespec-azure-resource-manager/arm-resource-interface-requires-decorator" "Polling endpoint: not an ARM resource lifecycle operation. Modeled as a bare route (matching routes.tsp ProtectionContainerRefreshOperationResults precedent in this same RP) so the standard ARM-resource GET constraints do not apply. The wire follows the Location-header LRO pattern (Azure/azure-resource-manager-rpc async-api-reference.md): 202 while running with Location/Retry-After, 200 with the terminal ProtectedItemResource body when complete (or 204 if no body)."
+@added(Versions.v2026_03_31_preview)
 interface ProtectedItemOperationResultsFromCrossTenantVault {
   /**
    * Fetches the result of any cross-tenant operation on the backup item.
@@ -471,8 +471,8 @@ interface ValidateOperationFromCrossTenantVault {
   >;
 }
 
-@added(Versions.v2026_03_31_preview)
 #suppress "@azure-tools/typespec-azure-resource-manager/arm-resource-interface-requires-decorator" "Polling endpoint: not an ARM resource lifecycle operation. Modeled as a bare route (matching routes.tsp ProtectionContainerRefreshOperationResults precedent in this same RP) so the standard ARM-resource GET constraints do not apply. The wire follows the Location-header LRO pattern (Azure/azure-resource-manager-rpc async-api-reference.md): 202 while running with Location/Retry-After, 200 with the terminal ValidateOperationsResponse body when complete (or 204 if no body)."
+@added(Versions.v2026_03_31_preview)
 interface ValidateOperationResultFromCrossTenantVault {
   /**
    * Gets the result of a specific validate operation for cross-tenant restore scenarios.
@@ -649,8 +649,8 @@ interface CrossTenantVaultCredential {
   >;
 }
 
-@added(Versions.v2026_03_31_preview)
 #suppress "@azure-tools/typespec-azure-resource-manager/arm-resource-interface-requires-decorator" "Polling endpoint: not an ARM resource lifecycle operation. Modeled as a bare route (matching routes.tsp ProtectionContainerRefreshOperationResults precedent in this same RP) so the standard ARM-resource GET constraints do not apply. The wire follows the Location-header LRO pattern (Azure/azure-resource-manager-rpc async-api-reference.md): 202 while running with Location/Retry-After, 200 with the terminal VaultCredentialCertificateResponse body when complete (or 204 if no body)."
+@added(Versions.v2026_03_31_preview)
 interface CrossTenantVaultCredentialOperationResults {
   /**
    * Gets the result of an async vault credential generation operation.

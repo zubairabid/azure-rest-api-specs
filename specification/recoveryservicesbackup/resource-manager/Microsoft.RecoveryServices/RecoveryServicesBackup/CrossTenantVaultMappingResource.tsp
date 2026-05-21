@@ -316,13 +316,15 @@ interface RestoresFromCrossTenantVault {
 }
 
 @added(Versions.v2026_03_31_preview)
-#suppress "@azure-tools/typespec-azure-resource-manager/arm-resource-interface-requires-decorator" "Polling endpoint: not an ARM resource lifecycle operation. Modeled as a bare route (matching routes.tsp ProtectionContainerRefreshOperationResults precedent in this same RP) so the standard ARM-resource GET constraints (sync-only, body-required) do not apply. The wire returns 202 in-progress or 204 complete, body-less, per the existing BMS service contract."
+#suppress "@azure-tools/typespec-azure-resource-manager/arm-resource-interface-requires-decorator" "Polling endpoint: not an ARM resource lifecycle operation. Modeled as a bare route (matching routes.tsp ProtectionContainerRefreshOperationResults precedent in this same RP) so the standard ARM-resource GET constraints do not apply. The wire follows the Location-header LRO pattern (Azure/azure-resource-manager-rpc async-api-reference.md): 202 while running with Location/Retry-After, 200 with the terminal ProtectedItemResource body when complete (or 204 if no body)."
 interface ProtectedItemOperationResultsFromCrossTenantVault {
   /**
    * Fetches the result of any cross-tenant operation on the backup item.
-   * Returns 202 while the operation is in progress and 204 when it has completed.
+   * While the operation is in progress this returns 202 Accepted with Location/Retry-After
+   * headers pointing back at this same poll URL. When the operation completes it returns
+   * either 200 OK with the final ProtectedItemResource body, or 204 No Content if there
+   * is no body to return.
    */
-  #suppress "@azure-tools/typespec-azure-resource-manager/lro-location-header" "Polling endpoint: progress is signaled by the 202 vs 204 status code returned by the BMS service. The 202 carries a Location header pointing back to itself (poll URL), not to a final resource."
   @route("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RecoveryServices/vaults/{vaultName}/backupCrossTenantVaultMappings/{crossTenantVaultMappingName}/backupFabrics/{fabricName}/protectionContainers/{containerName}/protectedItems/{protectedItemName}/operationResults/{operationId}")
   @get
   @tag("CrossTenant")
@@ -355,7 +357,14 @@ interface ProtectedItemOperationResultsFromCrossTenantVault {
     @doc("OperationID which represents the operation whose result needs to be fetched.")
     @path
     operationId: string,
-  ): ArmAcceptedResponse<ExtraHeaders = {}> | ArmNoContentResponse | ErrorResponse;
+  ):
+    | ArmResponse<ProtectedItemResource>
+    | ArmAcceptedResponse<
+        "Accepted",
+        ArmLroLocationHeader & Azure.Core.Foundations.RetryAfterHeader
+      >
+    | ArmNoContentResponse
+    | ErrorResponse;
 }
 
 // LegacyOperations alias for routes parented at the protected-item resource
@@ -464,13 +473,15 @@ interface ValidateOperationFromCrossTenantVault {
 }
 
 @added(Versions.v2026_03_31_preview)
-#suppress "@azure-tools/typespec-azure-resource-manager/arm-resource-interface-requires-decorator" "Polling endpoint: not an ARM resource lifecycle operation. Modeled as a bare route (matching routes.tsp ProtectionContainerRefreshOperationResults precedent in this same RP) so the standard ARM-resource GET constraints (sync-only, body-required) do not apply. The wire returns 202 in-progress or 204 complete, body-less, per the existing BMS service contract."
+#suppress "@azure-tools/typespec-azure-resource-manager/arm-resource-interface-requires-decorator" "Polling endpoint: not an ARM resource lifecycle operation. Modeled as a bare route (matching routes.tsp ProtectionContainerRefreshOperationResults precedent in this same RP) so the standard ARM-resource GET constraints do not apply. The wire follows the Location-header LRO pattern (Azure/azure-resource-manager-rpc async-api-reference.md): 202 while running with Location/Retry-After, 200 with the terminal ValidateOperationsResponse body when complete (or 204 if no body)."
 interface ValidateOperationResultFromCrossTenantVault {
   /**
    * Gets the result of a specific validate operation for cross-tenant restore scenarios.
-   * Returns 202 while the operation is in progress and 204 when it has completed.
+   * While the operation is in progress this returns 202 Accepted with Location/Retry-After
+   * headers pointing back at this same poll URL. When the operation completes it returns
+   * either 200 OK with the final ValidateOperationsResponse body, or 204 No Content if
+   * there is no body to return.
    */
-  #suppress "@azure-tools/typespec-azure-resource-manager/lro-location-header" "Polling endpoint: progress is signaled by the 202 vs 204 status code returned by the BMS service. The 202 carries a Location header pointing back to itself (poll URL), not to a final resource."
   @route("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RecoveryServices/vaults/{vaultName}/backupCrossTenantVaultMappings/{crossTenantVaultMappingName}/backupValidateOperationResults/{operationId}")
   @get
   @tag("CrossTenant")
@@ -491,7 +502,14 @@ interface ValidateOperationResultFromCrossTenantVault {
     @doc("OperationID which represents the operation whose result needs to be fetched.")
     @path
     operationId: string,
-  ): ArmAcceptedResponse<ExtraHeaders = {}> | ArmNoContentResponse | ErrorResponse;
+  ):
+    | ArmResponse<ValidateOperationsResponse>
+    | ArmAcceptedResponse<
+        "Accepted",
+        ArmLroLocationHeader & Azure.Core.Foundations.RetryAfterHeader
+      >
+    | ArmNoContentResponse
+    | ErrorResponse;
 }
 
 // LegacyOperations alias for routes parented at the mapping resource,
@@ -634,13 +652,15 @@ interface CrossTenantVaultCredential {
 }
 
 @added(Versions.v2026_03_31_preview)
-#suppress "@azure-tools/typespec-azure-resource-manager/arm-resource-interface-requires-decorator" "Polling endpoint: not an ARM resource lifecycle operation. Modeled as a bare route (matching routes.tsp ProtectionContainerRefreshOperationResults precedent in this same RP) so the standard ARM-resource GET constraints (sync-only, body-required) do not apply. The wire returns 202 in-progress or 204 complete, body-less, per the existing BMS service contract."
+#suppress "@azure-tools/typespec-azure-resource-manager/arm-resource-interface-requires-decorator" "Polling endpoint: not an ARM resource lifecycle operation. Modeled as a bare route (matching routes.tsp ProtectionContainerRefreshOperationResults precedent in this same RP) so the standard ARM-resource GET constraints do not apply. The wire follows the Location-header LRO pattern (Azure/azure-resource-manager-rpc async-api-reference.md): 202 while running with Location/Retry-After, 200 with the terminal VaultCredentialCertificateResponse body when complete (or 204 if no body)."
 interface CrossTenantVaultCredentialOperationResults {
   /**
    * Gets the result of an async vault credential generation operation.
-   * Returns 202 Accepted while the TEE job is in progress and 204 No Content when it has completed.
+   * While the TEE job is in progress this returns 202 Accepted with Location/Retry-After
+   * headers pointing back at this same poll URL. When the job completes it returns either
+   * 200 OK with the generated VaultCredentialCertificateResponse body, or 204 No Content
+   * if there is no body to return.
    */
-  #suppress "@azure-tools/typespec-azure-resource-manager/lro-location-header" "Polling endpoint: progress is signaled by the 202 vs 204 status code returned by the BMS service. The 202 carries a Location header pointing back to itself (poll URL), not to a final resource."
   @route("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RecoveryServices/vaults/{vaultName}/backupCrossTenantVaultMappings/{crossTenantVaultMappingName}/vaultCredentials/{certificateName}/operationResults/{operationId}")
   @get
   @tag("CrossTenant")
@@ -665,7 +685,14 @@ interface CrossTenantVaultCredentialOperationResults {
     @doc("Operation ID returned in the Location header of the generate call.")
     @path
     operationId: string,
-  ): ArmAcceptedResponse<ExtraHeaders = {}> | ArmNoContentResponse | ErrorResponse;
+  ):
+    | ArmResponse<VaultCredentialCertificateResponse>
+    | ArmAcceptedResponse<
+        "Accepted",
+        ArmLroLocationHeader & Azure.Core.Foundations.RetryAfterHeader
+      >
+    | ArmNoContentResponse
+    | ErrorResponse;
 }
 
 // LegacyOperations alias for routes parented at the certificate resource,
